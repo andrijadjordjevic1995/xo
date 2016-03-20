@@ -70,7 +70,7 @@ public class GUI extends JFrame {
 	}
 	
 	private void popuniTabelu(){
-		
+		//to do
 		
 	}
 }
