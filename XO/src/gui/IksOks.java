@@ -79,9 +79,6 @@ public class IksOks extends JFrame {
 		table.setModel(mt);
 		table.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, Color.gray));
 		table.setRowHeight(75);
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
-		table.setDefaultRenderer(String.class, centerRenderer);
 		
 		
 	}
