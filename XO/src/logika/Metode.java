@@ -14,6 +14,15 @@ public class Metode {
 		 }
 	}
 	
+	public void ocistiPolja(){
+		brojPoteza = 0;
+		 for(int i = 0; i < 3; i++){
+			 for(int j = 0; j < 3; j++){
+				 polja[i][j] = ' ';
+			 }
+		 }
+	}
+	
 	public void dodajUPolje(int i, int j){
 		if(polja[i][j] != ' ')
 			return;

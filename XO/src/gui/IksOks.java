@@ -2,11 +2,14 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import logika.Kompjuter;
 import logika.Metode;
@@ -14,6 +17,7 @@ import logika.Metode;
 import javax.swing.JButton;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import net.miginfocom.swing.MigLayout;
@@ -30,12 +34,10 @@ public class IksOks extends JFrame {
 	private JPanel panel;
 	private JPanel panel_1;
 	private JButton btnIgraj;
-	private JRadioButton rdbtnIgramPrvi;
-	private JRadioButton rdbtnIgramDrugi;
 	private JTable table;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private Kompjuter komp;
 	private Metode metode = new Metode();
+	private JButton btnRestartujIgru;
 
 	/**
 	 * Launch the application.
@@ -67,7 +69,7 @@ public class IksOks extends JFrame {
 		contentPane.add(getPanel(), BorderLayout.CENTER);
 		contentPane.add(getPanel_1(), BorderLayout.NORTH);
 		urediTabelu();
-		rdbtnIgramPrvi.setSelected(true);
+		komp = new Kompjuter(metode.getPolja(), metode);
 		
 	}
 
@@ -77,6 +79,10 @@ public class IksOks extends JFrame {
 		table.setModel(mt);
 		table.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, Color.gray));
 		table.setRowHeight(75);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
+		table.setDefaultRenderer(String.class, centerRenderer);
+		
 		
 	}
 
@@ -91,10 +97,9 @@ public class IksOks extends JFrame {
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();
-			panel_1.setLayout(new MigLayout("", "[grow][73px][79px][55px][grow]", "[23px]"));
-			panel_1.add(getRdbtnIgramPrvi(), "cell 1 0,alignx left,aligny top");
-			panel_1.add(getRdbtnIgramDrugi(), "cell 2 0,alignx left,aligny top");
-			panel_1.add(getBtnIgraj(), "cell 3 0,alignx left,aligny top");
+			panel_1.setLayout(new MigLayout("", "[grow][73px][79px][grow]", "[23px]"));
+			panel_1.add(getBtnIgraj(), "cell 1 0,alignx left,aligny top");
+			panel_1.add(getBtnRestartujIgru(), "cell 2 0");
 		}
 		return panel_1;
 	}
@@ -112,32 +117,23 @@ public class IksOks extends JFrame {
 
 					}else{
 					
-					ModelTabele mt = (ModelTabele)table.getModel();
-					char [][] tabela = mt.getPolja();
-					komp = new Kompjuter(rdbtnIgramPrvi.isSelected(), tabela , metode);
-					table.setVisible(true);
 					komp.igraj();
+					ModelTabele mt = (ModelTabele)table.getModel();
 					mt.fireTableDataChanged();
+					}
+					if(metode.vratiPobednika() == 'X' || metode.vratiPobednika() == 'O'){
+						
+						JOptionPane.showInternalMessageDialog(contentPane, "Pobedio je: " + metode.vratiPobednika(), "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
+						
+					}else if(metode.vratiPobednika() == 'd'){
+						JOptionPane.showInternalMessageDialog(contentPane, "Nereseno je!", "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
+
 					}
 					
 				}
 			});
 		}
 		return btnIgraj;
-	}
-	private JRadioButton getRdbtnIgramPrvi() {
-		if (rdbtnIgramPrvi == null) {
-			rdbtnIgramPrvi = new JRadioButton("igram prvi");
-			buttonGroup.add(rdbtnIgramPrvi);
-		}
-		return rdbtnIgramPrvi;
-	}
-	private JRadioButton getRdbtnIgramDrugi() {
-		if (rdbtnIgramDrugi == null) {
-			rdbtnIgramDrugi = new JRadioButton("igram drugi");
-			buttonGroup.add(rdbtnIgramDrugi);
-		}
-		return rdbtnIgramDrugi;
 	}
 	private JTable getTable() {
 		if (table == null) {
@@ -159,19 +155,31 @@ public class IksOks extends JFrame {
 
 					}else{
 						metode.dodajUPolje(table.getSelectedRow(), table.getSelectedColumn());
-					}
-					if(metode.vratiPobednika() == 'X' || metode.vratiPobednika() == 'O'){
-						
-						JOptionPane.showInternalMessageDialog(contentPane, "Pobedio je: " + metode.vratiPobednika(), "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
-						
-					}else if(metode.vratiPobednika() == 'd'){
-						JOptionPane.showInternalMessageDialog(contentPane, "Nereseno je!", "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
+						if(metode.vratiPobednika() == 'X' || metode.vratiPobednika() == 'O'){
+							
+							JOptionPane.showInternalMessageDialog(contentPane, "Pobedio je: " + metode.vratiPobednika(), "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
+							
+						}else if(metode.vratiPobednika() == 'd'){
+							JOptionPane.showInternalMessageDialog(contentPane, "Nereseno je!", "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
 
+						}
 					}
-						
 				}
 			});
 		}
 		return table;
+	}
+	private JButton getBtnRestartujIgru() {
+		if (btnRestartujIgru == null) {
+			btnRestartujIgru = new JButton("Restart");
+			btnRestartujIgru.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					metode.ocistiPolja();
+					ModelTabele mt = (ModelTabele)table.getModel();
+					mt.fireTableDataChanged();
+				}
+			});
+		}
+		return btnRestartujIgru;
 	}
 }
