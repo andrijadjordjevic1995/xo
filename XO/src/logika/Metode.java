@@ -99,7 +99,7 @@ public class Metode {
 		if(polja[0][2] != ' '
 				&& polja[0][2] == polja[1][1] 
 						&& polja [0][2] == polja[2][0])
-			return polja[0][0];
+			return polja[0][2];
 		return ' ';
 	}
 }
