@@ -11,9 +11,11 @@ public class Kompjuter extends Polje {
 	private int kolona;
 	private int red;
 	private char slovo;
+	private Metode metode;
 	
-	public Kompjuter(boolean igraKaoPrvi, char[][] tabela){
+	public Kompjuter(boolean igraKaoPrvi, char[][] tabela, Metode metode){
 		this.tabela = tabela;
+		this.metode = metode;
 		if(igraKaoPrvi == true){
 			slovo = 'O';
 		}else{
@@ -27,6 +29,7 @@ public class Kompjuter extends Polje {
 		
 		if(tabela[red][kolona] == ' '){
 			tabela[red][kolona] = slovo;
+			metode.setBrojPoteza((metode.getBrojPoteza())+1);
 		}else{
 			igraj();
 		}

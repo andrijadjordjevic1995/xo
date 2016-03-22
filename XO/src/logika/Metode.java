@@ -14,7 +14,15 @@ public class Metode {
 		 }
 	}
 	
-	
+	public void dodajUPolje(int i, int j){
+		if(polja[i][j] != ' ')
+			return;
+		brojPoteza++;
+		if(brojPoteza % 2 == 0)
+			polja[i][j] = 'O';
+		else
+			polja[i][j] = 'X';
+	}
 	
 	public int getBrojPoteza() {
 		return brojPoteza;

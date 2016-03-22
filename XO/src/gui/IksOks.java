@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import logika.Kompjuter;
+import logika.Metode;
 
 import javax.swing.JButton;
 import javax.swing.JRadioButton;
@@ -17,6 +19,10 @@ import javax.swing.ButtonGroup;
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class IksOks extends JFrame {
 
@@ -29,6 +35,7 @@ public class IksOks extends JFrame {
 	private JTable table;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private Kompjuter komp;
+	private Metode metode = new Metode();
 
 	/**
 	 * Launch the application.
@@ -52,7 +59,7 @@ public class IksOks extends JFrame {
 	public IksOks() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 450);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -65,18 +72,11 @@ public class IksOks extends JFrame {
 	}
 
 	private void urediTabelu() {
-		// TODO Auto-generated method stub
-		char[][] polja = new char[3][3];
 		
-		for(int i = 0; i < 3; i++){
-			 for(int j = 0; j < 3; j++){
-				 polja[i][j] = ' ';
-			 }
-		 }
-		
-		ModelTabele mt = new ModelTabele(polja);
+		ModelTabele mt = new ModelTabele(metode.getPolja());
 		table.setModel(mt);
 		table.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, Color.gray));
+		table.setRowHeight(75);
 		
 	}
 
@@ -103,11 +103,23 @@ public class IksOks extends JFrame {
 			btnIgraj = new JButton("Igraj");
 			btnIgraj.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					if(metode.vratiPobednika() == 'X' || metode.vratiPobednika() == 'O'){
+						
+						JOptionPane.showInternalMessageDialog(contentPane, "Pobedio je: " + metode.vratiPobednika(), "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
+						
+					}else if(metode.vratiPobednika() == 'd'){
+						JOptionPane.showInternalMessageDialog(contentPane, "Nereseno je!", "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
+
+					}else{
+					
 					ModelTabele mt = (ModelTabele)table.getModel();
 					char [][] tabela = mt.getPolja();
-					komp = new Kompjuter(rdbtnIgramPrvi.isSelected(), tabela );
+					komp = new Kompjuter(rdbtnIgramPrvi.isSelected(), tabela , metode);
+					table.setVisible(true);
 					komp.igraj();
 					mt.fireTableDataChanged();
+					}
+					
 				}
 			});
 		}
@@ -130,6 +142,27 @@ public class IksOks extends JFrame {
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
+			
+			table.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+				}
+				@Override
+				public void mousePressed(MouseEvent e) {
+					
+					if(metode.vratiPobednika() == 'X' || metode.vratiPobednika() == 'O'){
+						
+						JOptionPane.showInternalMessageDialog(contentPane, "Pobedio je: " + metode.vratiPobednika(), "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
+						
+					}else if(metode.vratiPobednika() == 'd'){
+						JOptionPane.showInternalMessageDialog(contentPane, "Nereseno je!", "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
+
+					}else{
+						metode.dodajUPolje(table.getSelectedRow(), table.getSelectedColumn());
+					}
+						
+				}
+			});
 		}
 		return table;
 	}
