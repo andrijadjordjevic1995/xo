@@ -160,6 +160,14 @@ public class IksOks extends JFrame {
 					}else{
 						metode.dodajUPolje(table.getSelectedRow(), table.getSelectedColumn());
 					}
+					if(metode.vratiPobednika() == 'X' || metode.vratiPobednika() == 'O'){
+						
+						JOptionPane.showInternalMessageDialog(contentPane, "Pobedio je: " + metode.vratiPobednika(), "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
+						
+					}else if(metode.vratiPobednika() == 'd'){
+						JOptionPane.showInternalMessageDialog(contentPane, "Nereseno je!", "POBEDNIK", JOptionPane.INFORMATION_MESSAGE);
+
+					}
 						
 				}
 			});
