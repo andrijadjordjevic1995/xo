@@ -1,3 +1,7 @@
+/**
+ * @author Petar Karuovic, Andrija Djordjevic, Jana Djurovic
+ */
+
 package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -79,6 +83,8 @@ public class IksOks extends JFrame {
 		table.setModel(mt);
 		table.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, Color.gray));
 		table.setRowHeight(75);
+		table.setFont(new Font("noviFont", Font.BOLD, 40));
+		
 		
 		
 	}

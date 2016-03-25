@@ -79,7 +79,7 @@ public class Metode {
 	}
 	private char porediKolonu(){
 		for(int i = 0; i < 3; i++){
-			if(polja[i][0] != ' ' &&
+			if(polja[0][i] != ' ' &&
 					polja[0][i] == polja[1][i] &&
 						polja[0][i] == polja[2][i])
 				return polja[0][i];
